@@ -19,10 +19,10 @@ namespace com.afjk.tinyhttpserver
         public string DocumentRoot { get; set; }
 
         // POSTリクエストのテキストデータ処理用のデリゲート
-        public Action<string> OnReceiveText { get; set; }
+        public Action<string, string> OnReceiveText { get; set; }
 
         // POSTリクエストのバイナリデータ処理用のデリゲート
-        public Action<byte[]> OnReceiveBinary { get; set; }
+        public Action<string, byte[]> OnReceiveBinary { get; set; }
         public bool? IsRunning => serverRunning;
 
         public void StartServer()
@@ -163,7 +163,8 @@ namespace com.afjk.tinyhttpserver
                 // コンテンツタイプを取得
                 string contentType = context.Request.ContentType;
 
-                if (contentType != null && (contentType.StartsWith("text/") || contentType == "application/json"))
+                Debug.Log($"ContentType:{contentType}");
+                if (contentType != null && (contentType.StartsWith("text/") || contentType == "application/json" || contentType == "application/x-www-form-urlencoded"))
                 {
                     // テキストデータとして処理
                     using (var reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding))
@@ -172,7 +173,7 @@ namespace com.afjk.tinyhttpserver
                         Debug.Log($"Received text data: {textData}");
 
                         // テキストデータの処理をデリゲートに委任
-                        OnReceiveText?.Invoke(textData);
+                        OnReceiveText?.Invoke(context.Request.RawUrl, textData);
                     }
 
                     // 成功レスポンスを返す
@@ -196,7 +197,7 @@ namespace com.afjk.tinyhttpserver
                             Debug.Log($"Received binary data of length: {binaryData.Length}");
 
                             // バイナリデータの処理をデリゲートに委任
-                            OnReceiveBinary?.Invoke(binaryData);
+                            OnReceiveBinary?.Invoke(context.Request.RawUrl, binaryData);
                         }
 
                         // 成功レスポンスを返す
