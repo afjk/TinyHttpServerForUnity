@@ -1,6 +1,6 @@
 {
   "name": "com.afjk.tinyhttpserver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "Tiny HTTP Server for Unity",
   "description": "A simple HTTP server for Unity.",
   "unity": "2019.4",
