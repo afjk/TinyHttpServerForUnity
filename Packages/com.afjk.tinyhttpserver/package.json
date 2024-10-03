@@ -1,0 +1,15 @@
+{
+  "name": "com.afjk.tinyhttpserver",
+  "version": "0.0.1",
+  "displayName": "Tiny HTTP Server for Unity",
+  "description": "A simple HTTP server for Unity.",
+  "unity": "2019.4",
+  "keywords": [
+    "http",
+    "server"
+  ],
+  "author": {
+    "name": "afjk",
+    "email": "afjk01@gmail.com"
+  }
+}
