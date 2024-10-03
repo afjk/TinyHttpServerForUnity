@@ -12,6 +12,14 @@
 
 ## Installation
 
+To install the TinyHttpServer package using OpenUPM, run this command:
+
+```
+openupm add com.afjk.tinyhttpserver
+```
+
+or
+
 To install the TinyHttpServer package using Unity Package Manager, follow these steps:
 
 1.	Open the Unity Editor and go to Window -> Package Manager.
