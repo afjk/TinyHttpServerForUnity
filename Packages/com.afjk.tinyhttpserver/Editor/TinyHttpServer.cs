@@ -27,11 +27,17 @@ namespace com.afjk.tinyhttpserver
 
         // ルートとハンドラーをマップするディクショナリ
         public delegate Task RouteHandler(HttpListenerContext context);
-        public Dictionary<string, RouteHandler> Routes { get; } = new Dictionary<string, RouteHandler>();
-        
-        public void AddRoute(string route, RouteHandler handler)
+        public Dictionary<string, Dictionary<string, RouteHandler>> Routes { get; } = new Dictionary<string, Dictionary<string, RouteHandler>>();
+
+        public void AddRoute(string route, string method, RouteHandler handler)
         {
-            Routes[route] = handler;
+            Debug.Log($"{route} {method}");
+            if (!Routes.ContainsKey(route))
+            {
+                Routes[route] = new Dictionary<string, RouteHandler>();
+            }
+            Routes[route][method] = handler;
+            Debug.Log(Routes);
         }
         
         public bool? IsRunning => serverRunning;
@@ -106,44 +112,21 @@ namespace com.afjk.tinyhttpserver
             // HTTPメソッドの取得
             string httpMethod = context.Request.HttpMethod;
 
+            Debug.Log($"[dbg] {httpMethod}");
             // リクエストパスの取得
             string requestPath = context.Request.RawUrl;
+            Debug.Log($"[dbg] {requestPath}");
+
             
-            if (httpMethod == "GET")
+            if (Routes.ContainsKey(requestPath) && Routes[requestPath].ContainsKey(httpMethod))
             {
-                if (Routes.ContainsKey(requestPath))
-                {
-                    // ルートとして処理
-                    await Routes[requestPath](context);
-                }
-                else
-                {
-                    // ファイルパスとして処理
-                    await HandleGetRequest(context);
-                }
-            }
-            else if (httpMethod == "POST")
-            {
-                if (Routes.ContainsKey(requestPath))
-                {
-                    // ルートとして処理
-                    await Routes[requestPath](context);
-                }
-                else
-                {
-                    // ファイルパスとして処理
-                    await HandlePostRequest(context);
-                }
+                // ルートとして処理
+                await Routes[requestPath][httpMethod](context);
             }
             else
             {
-                // 他のメソッドは405 Method Not Allowedを返す
-                context.Response.StatusCode = 405;
-                byte[] buffer = Encoding.UTF8.GetBytes("405 Method Not Allowed");
-                context.Response.ContentType = "text/plain";
-                context.Response.ContentLength64 = buffer.Length;
-                await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
-                context.Response.Close();
+                // ファイルパスとして処理
+                await HandleGetRequest(context);
             }
         }
 

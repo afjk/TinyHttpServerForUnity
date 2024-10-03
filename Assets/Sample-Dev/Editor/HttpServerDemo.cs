@@ -28,7 +28,7 @@ public class HttpServerDemo
         server = new TinyHttpServer();
         server.Port = 8080;
         server.DocumentRoot = Path.Combine(Application.dataPath, "..", documentDir);
-        server.AddRoute("/name_form", HandleNameFormPost);
+        server.AddRoute("/name_form", "POST", HandleNameFormPost);
     }
 
 
