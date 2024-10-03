@@ -29,7 +29,17 @@ namespace com.afjk.tinyhttpserver
         public delegate Task RouteHandler(HttpListenerContext context);
         public Dictionary<string, Dictionary<string, RouteHandler>> Routes { get; } = new Dictionary<string, Dictionary<string, RouteHandler>>();
 
-        public void AddRoute(string route, string method, RouteHandler handler)
+        public void AddGetRoute(string route, RouteHandler handler)
+        {
+            AddRoute(route, "GET", handler);
+        }
+        
+        public void AddPostRoute(string route, RouteHandler handler)
+        {
+            AddRoute(route, "POST", handler);
+        }
+        
+        private void AddRoute(string route, string method, RouteHandler handler)
         {
             Debug.Log($"{route} {method}");
             if (!Routes.ContainsKey(route))
