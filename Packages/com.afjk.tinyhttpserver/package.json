@@ -11,5 +11,11 @@
   "author": {
     "name": "afjk",
     "email": "afjk01@gmail.com"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Sample",
+      "path": "Samples~"
+    }
+  ]
 }
