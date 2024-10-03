@@ -60,6 +60,8 @@ To use the server, you need to create an instance of the `TinyHttpServer` class,
 
 ```csharp
 var server = new TinyHttpServer();
+server.Port = 8080;
+server.DocumentRoot = Path.Combine(Application.dataPath, "..", "html");
 server.AddGetRoute("/example", HandleExampleGet);
 server.AddPostRoute("/example", HandleExamplePost);
 server.StartServer();
