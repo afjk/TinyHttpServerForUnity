@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,16 @@ namespace com.afjk.tinyhttpserver
 
         // POSTリクエストのバイナリデータ処理用のデリゲート
         public Action<string, byte[]> OnReceiveBinary { get; set; }
+
+        // ルートとハンドラーをマップするディクショナリ
+        public delegate Task RouteHandler(HttpListenerContext context);
+        public Dictionary<string, RouteHandler> Routes { get; } = new Dictionary<string, RouteHandler>();
+        
+        public void AddRoute(string route, RouteHandler handler)
+        {
+            Routes[route] = handler;
+        }
+        
         public bool? IsRunning => serverRunning;
 
         public void StartServer()
@@ -95,13 +106,34 @@ namespace com.afjk.tinyhttpserver
             // HTTPメソッドの取得
             string httpMethod = context.Request.HttpMethod;
 
+            // リクエストパスの取得
+            string requestPath = context.Request.RawUrl;
+            
             if (httpMethod == "GET")
             {
-                await HandleGetRequest(context);
+                if (Routes.ContainsKey(requestPath))
+                {
+                    // ルートとして処理
+                    await Routes[requestPath](context);
+                }
+                else
+                {
+                    // ファイルパスとして処理
+                    await HandleGetRequest(context);
+                }
             }
             else if (httpMethod == "POST")
             {
-                await HandlePostRequest(context);
+                if (Routes.ContainsKey(requestPath))
+                {
+                    // ルートとして処理
+                    await Routes[requestPath](context);
+                }
+                else
+                {
+                    // ファイルパスとして処理
+                    await HandlePostRequest(context);
+                }
             }
             else
             {
@@ -231,7 +263,7 @@ namespace com.afjk.tinyhttpserver
 
             context.Response.Close();
         }
-
+        
         private string GetMimeType(string filePath)
         {
             string extension = Path.GetExtension(filePath).ToLowerInvariant();
