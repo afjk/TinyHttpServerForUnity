@@ -8,7 +8,7 @@ public class TinyHttpServerEditor : EditorWindow
     private HttpServerDemo server;
     private bool serverRunning = false;
 
-    [MenuItem("Tool/Tiny HTTP Server")]
+    [MenuItem("Tools/Tiny HTTP Server")]
     public static void ShowWindow()
     {
         GetWindow<TinyHttpServerEditor>("Tiny HTTP Server");
