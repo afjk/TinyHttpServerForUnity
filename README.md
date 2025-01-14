@@ -11,16 +11,48 @@
 - **Delegates for Data Processing**: You can assign delegates to process the received text and binary data from POST requests.
 
 ## Installation
-
-To install the TinyHttpServer package using OpenUPM, run this command:
+### Install via OpenUPM
+To install the TinyHttpServer package using OpenUPM, run the following command in your project’s root folder:
 
 ```
 openupm add com.afjk.tinyhttpserver
 ```
 
-or
-
+### Install via Unity Package Manager (UPM)
 To install the TinyHttpServer package using Unity Package Manager, follow these steps:
+
+#### Using Scoped Registries
+1. Open your project’s manifest.json file.
+2. Add the following scoped registry configuration:
+```
+"scopedRegistries": [
+    {
+      "name": "afjk's UPM registory",
+      "url": "https://upm.afjk.jp",
+      "scopes": [
+        "com.afjk"
+      ]
+    }
+  ]
+```
+3. Save the file.
+4. In UnityEditor, go to Window > Package Manager.
+5. Select the My Registries section in the left panel.
+6. Search for TinyHttpServerForUnity and install it.
+
+
+### Using Project Settings
+Alternatively, you can configure the registry via Project Settings:
+1. In UnityEditor, go to Edit > Project Settings > Package Manager.
+2. Under Scoped Registries, add the following details:
+* Name: afjk’s UPM registory
+* URL: https://upm.afjk.jp
+* Scopes: com.afjk
+
+You can now find and install TinyHttpServerForUnity in the Package Manager.
+
+### Install from Git URL
+Alternatively, to install the TinyHttpServer package using Unity Package Manager, follow these steps:
 
 1.	Open the Unity Editor and go to Window -> Package Manager.
 2.	Click the + button in the top-left corner.
